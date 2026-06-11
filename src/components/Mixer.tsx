@@ -14,8 +14,7 @@ export default function Mixer({ onClose }: MixerProps) {
   const volumes = useSelector((state: RootState) => state.audio.volumes);
 
   return (
-    // Додав pb-4 для невеликого відступу знизу на мобільних, щоб не впиралося в край
-    <div className="w-full flex flex-col gap-4 select-none font-['Press_Start_2P',monospace] text-white pb-4">
+    <div className="w-full flex flex-col gap-4 select-none font-['Press_Start_2P',monospace] text-white ">
       
       <div className="flex justify-between items-center text-[7px] text-slate-400 font-bold tracking-wider uppercase gap-2">
         <span className="whitespace-nowrap">3-CHANNEL SIGNAL MIXER</span>
@@ -27,11 +26,7 @@ export default function Mixer({ onClose }: MixerProps) {
         </button>
       </div>
 
-      {/* 
-        Додав touch-action: none до контейнера крутилок. 
-        Це критично: тепер браузер не буде скролити сторінку, 
-        коли ти тягнеш пальцем по крутилці.
-      */}
+      
       <div 
         className="grid grid-cols-3 gap-2 bg-[#0c0916] border-[4px] border-black p-4 relative shadow-[inset_0px_4px_0px_rgba(0,0,0,0.6)]"
         style={{ touchAction: 'none' }}
