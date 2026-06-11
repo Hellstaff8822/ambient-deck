@@ -9,15 +9,15 @@ interface AudioKnobProps {
 }
 
 export default function AudioKnob({ label, value, onChange }: AudioKnobProps) {
-  const { onMouseDown, onWheel } = useKnobDrag({ value, onChange });
+  // Тепер хук повертає також onTouchStart для мобільних пристроїв
+  const { onMouseDown, onWheel, onTouchStart } = useKnobDrag({ value, onChange });
 
   const minAngle = -135;
   const maxAngle = 135;
   const currentAngle = minAngle + value * (maxAngle - minAngle);
 
-  // Математика для точної ретро-дуги (радіус 38)
   const circumference = 238.76; 
-  const arcLength = 179.07; // Рівно 270 градусів (шкала від 7:30 до 4:30)
+  const arcLength = 179.07; 
   const strokeDashoffset = arcLength - value * arcLength;
 
   return (
@@ -26,12 +26,8 @@ export default function AudioKnob({ label, value, onChange }: AudioKnobProps) {
         {label}
       </span>
 
-      {/* Зона крутилки разом зі шкалою */}
       <div className="w-20 h-20 flex items-center justify-center relative">
-        
-        {/* Ретро SVG-шкала (прибрали -rotate-90, тепер кути чисті) */}
         <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100">
-          {/* Темна підкладка треку шкали (початок на 135° — це 7:30 вечора) */}
           <circle 
             cx="50" cy="50" r="38" 
             fill="none" stroke="#161129" strokeWidth="5" 
@@ -39,7 +35,6 @@ export default function AudioKnob({ label, value, onChange }: AudioKnobProps) {
             strokeLinecap="round" 
             transform="rotate(135 50 50)" 
           />
-          {/* Активна помаранчева дуга гучності */}
           <circle 
             cx="50" cy="50" r="38" 
             fill="none" stroke="#ff9e3b" strokeWidth="5" 
@@ -52,17 +47,16 @@ export default function AudioKnob({ label, value, onChange }: AudioKnobProps) {
           />
         </svg>
 
-        {/* Сама фізична ручка */}
         <div
           onMouseDown={onMouseDown}
           onWheel={onWheel}
+          onTouchStart={onTouchStart}
           className="w-13 h-13 rounded-full bg-[#201a36] border-2 border-black flex items-center justify-center relative 
-                     cursor-ns-resize active:scale-[0.98] transition-all z-10"
+                     cursor-ns-resize active:scale-[0.98] transition-all z-10 touch-none" 
           style={{
             boxShadow: `3px 3px 0px rgba(0,0,0,1), 0 0 ${value * 14}px rgba(255,158,59,${value * 0.6})`
           }}
         >
-          {/* Покажчик повороту ручки */}
           <div
             className="absolute top-1 w-1 h-3 bg-[#ff9e3b] rounded-full origin-[center_22px] pointer-events-none"
             style={{
